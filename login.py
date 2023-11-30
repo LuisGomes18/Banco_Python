@@ -1,29 +1,26 @@
-# pylint: disable=W0621
-# pylint: disable=C0103
+from json import JSONDecodeError
+from extras import carregar_dados
 
 
-def login():
-    """
-    Prompts the user for a username and password, and checks if they match a predefined
-    set of credentials. If the credentials match, access is granted; otherwise, access is denied.
+def fazer_login(numero_conta, password, contas):
+    for conta in contas:
+        if conta['numero'] == numero_conta and conta['password']:
+            return True
+    return False
 
-    Usage:
-    1. Call the login() function.
-    2. Enter a username and password when prompted.
+def login_conta():
+    try:
+        dados = carregar_dados()
+        contas = dados['contas']
 
-    Example:
-    >>> login()
-    Username: luis
-    Password: luis
-    Access Granted
-    """
-    VERMELHO = '\033[31m'
-    VERDE = '\033[32m'
-    ORIGINAL = '\033[0m'
+        numero_conta = input('Numero de conta: ')
+        password = input('Password: ')
 
-    username = str(input('\n Username: '))
-    password = str(input(' Password: '))
-    if username == 'luis' and password == 'luis':  #! TMP
-        print(VERDE + "\nAccess Granted\n" + ORIGINAL)
-    else:
-        print(VERMELHO + "\nAccess Denied\n" + ORIGINAL)
+        if fazer_login(numero_conta, password, contas):
+            print('\nAcess Granted\n')
+        else:
+            print('\nAcess Denied\n')
+    except FileNotFoundError:
+        print('Ficheiro com dados das contas nao encontrado')
+    except JSONDecodeError:
+        print('Erro na formatação do contas.json')

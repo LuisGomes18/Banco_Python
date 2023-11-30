@@ -1,9 +1,7 @@
 from extras import apagar_terminal
-from extras import carregar_dados
-from login import login
+from login import login_conta
 
 
 apagar_terminal()
-carregar_dados()
 
-login()
+login_conta()

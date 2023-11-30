@@ -37,7 +37,7 @@ def carregar_dados():
         Exception: Para outros erros inesperados durante o carregamento dos dados.
     """
     try:
-        with open('data/data.json', 'r', encoding='utf-8') as dd:
+        with open('data/login.json', 'r', encoding='utf-8') as dd:
             dados = load(dd) # type: ignore
     except JSONDecodeError:
         print('Erro na formatação do .json')

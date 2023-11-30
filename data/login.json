@@ -1,0 +1,12 @@
+{
+    "contas": [
+        {
+            "numero": "12345",
+            "password": "senha123"
+        },
+        {
+            "numero": "67890",
+            "password": "outrasenha"
+        }
+    ]
+}
