@@ -1,3 +1,4 @@
+# pyright: reportOptionalSubscript=false
 """login module
 
 This module implements a basic login system.
@@ -13,7 +14,7 @@ from extras import carregar_dados
 from extras import guardar_dados
 
 
-def fazer_login(numero_conta, password, contas):
+def fazer_login(numero_conta, password, contas): # pylint: disable=W0613
     """Check if login credentials are valid.
 
     Args:
@@ -54,6 +55,8 @@ def login_conta():
 
         if fazer_login(numero_conta, password, contas):
             print("\nAcess Granted\n")
+            dados["usuario_atual"] = numero_conta
+            guardar_dados(dados)  # Corrigir para guardar os dados, não apenas as contas
         else:
             print("\nAcess Denied\n")
     except FileNotFoundError:
@@ -62,9 +65,11 @@ def login_conta():
         print("Erro na formatação do contas.json")
 
 
+
 def criar_conta():
     """
-    Função para criar uma nova conta, gerando um número único para a conta e solicitando ao usuário uma senha válida.
+    Função para criar uma nova conta, gerando um número único 
+    para a conta e solicitando ao usuário uma senha válida.
 
     Returns:
     None
@@ -90,4 +95,3 @@ def criar_conta():
     dados["contas"] = contas
 
     guardar_dados(dados)
-
