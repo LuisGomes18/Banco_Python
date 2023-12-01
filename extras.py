@@ -22,7 +22,7 @@ def carregar_dados():
 def guardar_dados(dados):
     try:
         with open("data/login.json", "w", encoding="utf-8") as dd:
-            dump(dados, dd)
+            dump(dados, dd, indent=4)
     except Exception as erro:  # pylint: disable=broad-except
         print(f"ERRO ao guardar dados: {erro}")
 
@@ -37,7 +37,8 @@ def apagar_terminal():
             os.system("clear")
         else:
             print(
-                f"Não foi possível determinar o sistema operacional. Sistema detectado: {sistema_operacional}"
+                f"Não foi possível determinar o sistema operacional. \
+Sistema detectado: {sistema_operacional}"
             )
     except OSError as erro:
         print(f"Erro ao tentar limpar a tela do console: {erro}")

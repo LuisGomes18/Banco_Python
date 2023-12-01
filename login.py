@@ -8,7 +8,9 @@ Functions:
 
 """
 from json import JSONDecodeError
+from random import randint
 from extras import carregar_dados
+from extras import guardar_dados
 
 
 def fazer_login(numero_conta, password, contas):
@@ -40,7 +42,7 @@ def login_conta():
 
     Raises:
     FileNotFoundError: If the file with account data is not found.
-    JSONDecodeError: If there is an error in the formatting of the contas.json file.
+    JSONDecodeError: If there is an error in the formatting of the login.json file.
 
     """
     try:
@@ -58,3 +60,34 @@ def login_conta():
         print("Ficheiro com dados das contas nao encontrado")
     except JSONDecodeError:
         print("Erro na formatação do contas.json")
+
+
+def criar_conta():
+    """
+    Função para criar uma nova conta, gerando um número único para a conta e solicitando ao usuário uma senha válida.
+
+    Returns:
+    None
+    """
+    dados = carregar_dados()
+    contas = dados["contas"]
+
+    lista_contas = [conta["numero"] for conta in contas]
+
+    numero_conta = str(randint(111, 999))
+    while numero_conta in lista_contas:
+        numero_conta = str(randint(111, 999))
+
+    print(f"Sua conta é: {numero_conta}")
+
+    password = input("Insira a sua senha: ")
+    while len(password) < 4 or len(password) > 16:
+        print("Senha inválida. A senha deve ter entre 4 e 16 caracteres.")
+        password = input("Insira a sua senha: ")
+
+    nova_conta = {"numero": numero_conta, "senha": password}
+    contas.append(nova_conta)
+    dados["contas"] = contas
+
+    guardar_dados(dados)
+
