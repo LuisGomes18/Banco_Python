@@ -1,7 +1,8 @@
+"""_summary_
+"""
 from extras import apagar_terminal
-from login import login_conta
+from login import metodo_login_ou_criar_conta
 
 
 apagar_terminal()
-
-login_conta()
+metodo_login_ou_criar_conta()

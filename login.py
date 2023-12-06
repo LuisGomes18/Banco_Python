@@ -12,6 +12,7 @@ from json import JSONDecodeError
 from random import randint
 from extras import carregar_dados
 from extras import guardar_dados
+from extras import apagar_terminal
 
 
 def fazer_login(numero_conta, password, contas): # pylint: disable=W0613
@@ -50,15 +51,15 @@ def login_conta():
         dados = carregar_dados()
         contas = dados["contas"]
 
-        numero_conta = input("Numero de conta: ")
+        numero_conta = input("\nNumero de conta: ")
         password = input("Password: ")
 
         if fazer_login(numero_conta, password, contas):
-            print("\nAcess Granted\n")
+            print('\033[32m' + "\nAcess Granted\n" + '\033[0;0m')
             dados["usuario_atual"] = numero_conta
             guardar_dados(dados)  # Corrigir para guardar os dados, não apenas as contas
         else:
-            print("\nAcess Denied\n")
+            print('\033[31m' + "\nAcess Denied\n" + '\033[0;0m')
     except FileNotFoundError:
         print("Ficheiro com dados das contas nao encontrado")
     except JSONDecodeError:
@@ -83,15 +84,52 @@ def criar_conta():
     while numero_conta in lista_contas:
         numero_conta = str(randint(111, 999))
 
-    print(f"Sua conta é: {numero_conta}")
+    print(f"\nSua conta é: {numero_conta}")
 
     password = input("Insira a sua senha: ")
     while len(password) < 4 or len(password) > 16:
         print("Senha inválida. A senha deve ter entre 4 e 16 caracteres.")
         password = input("Insira a sua senha: ")
 
-    nova_conta = {"numero": numero_conta, "senha": password}
+    nova_conta = {"numero": numero_conta, "password": password}
     contas.append(nova_conta)
     dados["contas"] = contas
 
     guardar_dados(dados)
+    apagar_terminal()
+    login_conta()
+
+
+def metodo_login_ou_criar_conta():
+    """
+    Função que permite ao usuário escolher entre criar uma conta (opção 1) ou fazer login (opção 2).
+
+    Exemplo:
+    >>> metodo_login_ou_criar_conta()
+    1) Criar Conta
+    2) Fazer Login
+    --> 1
+    # (Usuário escolhe criar conta)
+    # (A função criar_conta() é chamada)
+
+    >>> metodo_login_ou_criar_conta()
+    1) Criar Conta
+    2) Fazer Login
+    --> 2
+    # (Usuário escolhe fazer login)
+    # (A função login_conta() é chamada)
+
+    >>> metodo_login_ou_criar_conta()
+    1) Criar Conta
+    2) Fazer Login
+    --> 3
+    # (Usuário fornece um valor inválido)
+    # 'Valor Inválido' é impresso na tela
+    """
+    resposta = int(input('\n1) Criar Conta\n2) Fazer Login\n--> '))
+    if resposta == 1:
+        criar_conta()
+    elif resposta == 2:
+        login_conta()
+    else:
+        print('Valor Inválido')
